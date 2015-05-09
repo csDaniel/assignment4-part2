@@ -5,17 +5,20 @@
 
 // id, name, category, length, rented
 $dbhost = 'oniddb.cws.oregonstate.edu';
-$dbname = 'ofarreld-db';
 $dbuser = 'ofarreld-db';
 $dbpass = 'cfll9z41YEI1fBfb';
-$dbase = 'cs290as0402movies';
+$table = 'cs290as0402movies';
 
 
 
-$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbase);
-if ($mysqli->connection_error) {
-  echo "Connection error";
+$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbuser);
+if (!$mysqli || $mysqli->connection_errno) {
+  echo "Connection error" . $mysqli->connection_errno . " " . $mysqli->connect_error;
+} else {
+  echo "connection worked!";
+  
 }
+
 
 function init() {
   global $mysqli, $table;
@@ -23,19 +26,17 @@ function init() {
   $all = $mysqli->prepare("SELECT * FROM $table");
   $all->execute();
   $result = $all->get_result();
- 
-  var_dump($result);
-  var_dump($all);
- 
+  
   buildTable($result);  
   $all->close(); 
-  
-  echo '<p>alert()</p>';
+
 }
 
 if(isset($_REQUEST['action'])) {
   $action = $_REQUEST['action'];
 }
+
+// id, name, category, length, rented
 function buildTable($res) {
   echo '<table>';
   echo '<tr>';
@@ -51,7 +52,6 @@ function buildTable($res) {
     echo '<td>'.$row['length'].'</td>';
     echo '<td class="position">'.$row['category'].'</td>';
     echo '<td>';
-    echo '<input type="text" class="team" value="'.$row['rented'].'"></td>';
     echo '<td class="update">Update</td>';
     echo '<td class="remove">Remove</td>';
     echo '</tr>';

@@ -18,7 +18,7 @@ function makeRequest (statement) {
   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
     var response = xmlhttp.responseText;
     var elem = document.getElementById('outputTable');
-    //outputTable.innerHTML = response;
+    elem.innerHTML = response;
     localStorage.setItem('localPlayers', response );
     // addListenerts();
   }
@@ -31,7 +31,7 @@ function makeRequest (statement) {
   var sortBy = 'sortBy=' + localStorage.getItem('sortBy');
   statement += '&' + filter + '&' + filterBy + '&' + sortBy;
   */
-  console.log(statement);
+  
   xmlhttp.open("GET",'assign0402p.php?' + statement,true);
   xmlhttp.send();
   
