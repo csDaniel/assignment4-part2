@@ -5,44 +5,19 @@ $dbhost = 'oniddb.cws.oregonstate.edu';
 $dbuser = 'ofarreld-db';
 $dbpass = 'cfll9z41YEI1fBfb';
 $dbname = 'ofarreld-db';
-$table = 'cs290as0402movies';
+$table = 'backup';
 
 $mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
 if (!$mysqli || $mysqli->connection_errno) {
   echo "Connection error" . $mysqli->connection_errno . " " . $mysqli->connect_error;
-} 
+ 
 
 function init() {
-  global $table, $mysqli;
-  $all = $mysqli->prepare("SELECT * FROM $table");
-  $all->execute();
-  $res = $all->get_results();
-  while($row = $res->fetch_assoc()) {
-    echo $row['id'];
-  }
-
+  global $table;
+  global $mysqli;  
   
-}
-
-// sort the requests sent from javascript
-if(isset($_REQUEST['action'])) {
-  $action = $_REQUEST['action'];
-  if ($action == 'init') {
-    init();
-    
-    
-  }
-}
-
-
-
-/*
-function init() {
-  global $mysqli, $table;
-
-  var_dump($mysqli);
-}
+  echo "test";
   /*
   // initializing table data from the db
   $all = $mysqli->prepare("SELECT * FROM $table");
@@ -54,8 +29,18 @@ function init() {
   
   buildTable($result);  
   $all->close(); 
-
+*/
 }
+
+// sort the requests sent from javascript
+if(isset($_REQUEST['action'])) {
+  $action = $_REQUEST['action'];
+  if ($action == 'init') {
+    init();
+  }
+}
+
+
 
 // id, name, category, length, rented
 function buildTable($res) {
