@@ -1,37 +1,37 @@
 <?php
+include 'assign0402config.php';
 
-// include 'assign0402config.php';
-$dbhost = 'oniddb.cws.oregonstate.edu';
-$dbuser = 'ofarreld-db';
-$dbpass = 'cfll9z41YEI1fBfb';
-$dbname = 'ofarreld-db';
-$table = 'backup';
 
 $mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
 if (!$mysqli || $mysqli->connection_errno) {
   echo "Connection error" . $mysqli->connection_errno . " " . $mysqli->connect_error;
- 
+}
+
 
 function init() {
-  global $table;
+ /* global $table;
   global $mysqli;  
-  
-  echo "test";
-  /*
+ 
   // initializing table data from the db
   $all = $mysqli->prepare("SELECT * FROM $table");
   $all->execute();
   $result = $all->get_result();
-  
-  echo "<br> Whatever <br>";
-  var_dump($result);
-  
-  buildTable($result);  
-  $all->close(); 
-*/
-}
 
+ // buildTable($result);  
+  $all->close(); 
+}*/
+
+  global $mysqli, $table;
+  $all = $mysqli->prepare("SELECT * FROM $table");
+  $all->execute();
+  $res = $all->get_result();
+  //  $list = array();
+  buildTable($res);
+  //echo json_encode($list);
+  $all->close();
+}
+  
 // sort the requests sent from javascript
 if(isset($_REQUEST['action'])) {
   $action = $_REQUEST['action'];
@@ -56,11 +56,12 @@ function buildTable($res) {
     echo '<tr id="'.$row['id'].'">';
     echo '<td>'.$row['name'].'</td>';
     echo '<td>'.$row['length'].'</td>';
-    echo '<td class="position">'.$row['category'].'</td>';
+    echo '<td>'.$row['category'].'</td>';
+    echo '<td> <div id="rented'.$row['id'].'>Rented</div></td>';
     echo '<td>';
     echo '</tr>';
   }
   echo '</table>';  
-}*/
+} 
 
 ?>

@@ -20,7 +20,7 @@ function makeRequest (statement) {
       var response = xmlhttp.responseText;
       var elem = document.getElementById('outputTable');
       elem.innerHTML = response;
-      localStorage.setItem('movieTable', response );
+      //localStorage.setItem('movieTable', response );
       // addListenerts();
     }
   }/*
