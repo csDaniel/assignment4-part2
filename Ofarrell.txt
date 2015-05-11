@@ -1,0 +1,20 @@
+Start: Mon, 11 May 2015 20:16:51 +0900
+End: Tue, 12 May 2015 02:16:51 +0900
+Tasks: Finished the project. Began around 8pm
+
+Start: Mon, 11 May 2015 11:48:17 +0900
+End: Mon, 11 May 2015 14:48:17 +0900
+Tasks: began at 11:30, finished accessing db, adding, and removing entries
+
+Start: Sun, 10 May 2015 15:20:14 +0900
+End: Sun, 10 May 2015 23:31:36 +0900
+Tasks: Merge branch 'master' of https://github.com/csDaniel/assignment4-part2
+Unable to solve 500 error.
+Began work with mysql connection problem at 3:20pm
+
+Start: Sat, 9 May 2015 16:10:31 +0900
+End: Sat, 9 May 2015 21:39:34 +0900
+Tasks: Finished the basic html and css. begun php and js.
+Finished for tonight. Continued testing with the html>js>php>mysql connection
+
+C:\Users\Dan\google drive\osu\cs290\assignment4-part2\assignment4-part2 [master]>
