@@ -1,9 +1,6 @@
 <?php
 include 'assign0402config.php';
 
-ini_set('display_errors', 'On');
-
-
 // id, name, category, length, rented
 $mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 if (!$mysqli || $mysqli->connection_errno) {
@@ -12,24 +9,13 @@ if (!$mysqli || $mysqli->connection_errno) {
   echo "Current Inventory:";
 }
 
-
-function init() {
-  global $table;
-  global $mysqli;  
- 
-  // initializing table data from the db
-  $all = $mysqli->prepare("SELECT * FROM $table");
-  $all->execute();
-  $res = $all->get_result();
-  
- 
-  makeTable($res);
-  
-  $res->close();   
-}
-
 function makeTable($results) {
-  echo '<table>';
+  
+  $catMenu = array();
+  array_push($catMenu, "Default");
+  
+  // actual table
+  echo '<table id="movieTable">';
   echo '<tr>';
   echo '<td>Title</td>';
   echo '<td>Category</td>';
@@ -38,19 +24,40 @@ function makeTable($results) {
   echo '</tr>';
   while ($row = $results->fetch_assoc()) {
     echo '<tr id="'.$row['id'].'">';
-    echo '<td>' .$row['id'].'</td>';
     echo '<td>' .$row['name']. '</td>';
     echo '<td>' .$row['category']. '</td>';    
-    echo '<td>' .$row['length']. '</td>';   
-    echo '<td> <div class="status">Rental Status</div></td>';
+    echo '<td>' .$row['length']. '</td>';    
+    echo '<td> <div class="status">';
+      if ($row['rented']) { 
+        echo "Checked Out";
+      } else {
+        echo "Available";
+      }
+    echo '</div></td>';
     echo '<td> <div class="removeVid">Remove</div></td>';
     echo '</tr>';
-    
+    array_push($catMenu, $row['category']);
   }
   echo '</table>';
+ 
+  //table filter options
+  $cat = array_unique($catMenu, SORT_REGULAR);
+  echo '<div>';
+  echo '<span>Filter Films by Category</span></br>';
+  echo '<select id ="dropdownMenu">';
+  foreach ($cat as $value) {
+    $temp++;    
+    echo '<option class = "dropdown" value = '.$temp.'>'.$value.'</option>';
+  }
+  echo '<option class="none" value="none">none</option>';
+  echo '</select>';
+  echo '</div>';
+
+  
 }
 
 function sortTable() {
+  // default case for filterBy none/Default
   global $mysqli;
   global $table;
   
@@ -62,7 +69,6 @@ function sortTable() {
   
   $res->close();
   
-  
 }
 
 function addMovie($nName, $nLength, $nCat) {
@@ -70,10 +76,14 @@ function addMovie($nName, $nLength, $nCat) {
   global $mysqli;
   global $table;
   $rented = 0;
+  if ($nLength < 0) {
+    echo '<p>Error: Films cannot have length less than 0</p>';
+  } else {
   $add = $mysqli->prepare("INSERT INTO $table (name, category, length, rented) VALUES (?,?,?,?)");
   $add->bind_param('ssii', $nName, $nCat, $nLength, $rented);
   $add->execute();
   $add->close();
+  }
 }
 
 function removeMovie($id) {
@@ -83,12 +93,43 @@ function removeMovie($id) {
   $remove->bind_param('i', $id);
   $remove->execute();
   $remove->close();
-  
 }
+
+function updateMovie($id, $rented) {
+  global $mysqli;
+  global $table;
+  $update = $mysqli->prepare("UPDATE $table SET rented = ? WHERE id = ?");
+  $update->bind_param('ii', $rented, $id);
+  $update->execute();
+  $update->close();
+}
+
+function deleteAllMovies() {
+  global $mysqli;
+  global $table;
+  $delAll = $mysqli->prepare("TRUNCATE TABLE $table");
+  $delAll->execute();
+  $delAll->close();  
+}
+
+function filterTable($filterType) {
+  global $mysqli;
+  global $table;
+  $filtered = $mysqli->prepare("SELECT * FROM $table WHERE category= '$filterType'");
+  $filtered->execute();
+ 
+  $res = $filtered->get_result();
   
+  makeTable($res);
+  
+  $res->close(); 
+}
+ 
 // sort the requests sent from javascript
 if(isset($_REQUEST['action'])) {
   $action = $_REQUEST['action'];
+  $filterType = $_REQUEST['filterBy'];
+  
   if ($action == 'init') {
     //init();
   } else if ($action == 'add') {
@@ -98,11 +139,20 @@ if(isset($_REQUEST['action'])) {
     addMovie($nName, $nLength, $nCat);
   } else if ($action == 'remove') {
     $id = $_REQUEST['id'];
-    echo $id;
     removeMovie($id);
+  } else if ($action == 'update') {
+    $id = $_REQUEST['id'];
+    $rented = $_REQUEST['rented'];
+    updateMovie($id, $rented);    
+  } else if ($action == 'deleteAll') {
+    deleteAllMovies();    
   }
-  // default case. currently defaults when action=init
-  sortTable();
+  // default case + sorted cases are handled at the end
+  if ($filterType != 'Default' && $filterType != 'none') {  
+      filterTable($filterType);
+  } else {
+    sortTable();
+  }
 }
 
 

@@ -18,15 +18,29 @@ div {
 
 }
 
-#outputTable, #inputField {
-    margin-left: auto;
-    margin-right: auto;
+#outputTable, #inputField , #dropdownMenu, #deleteDiv {
+  margin-left: auto;
+  margin-right: auto;
 
   width: 90%;  
 }
 
+#deleteAll {
+  text-align: center;
+  background-color: red;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  padding: 4px;
+
+}
+
 .removeVid {
   background-color: #DDDDDD;
+  padding: 2px; 
+}
+
+.status {
+  background-color: lightgreen;
   padding: 2px;
-  
 }
