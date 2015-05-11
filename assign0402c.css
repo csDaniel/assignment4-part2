@@ -1,6 +1,5 @@
 body {
   background-color: lightgray;
-
 }
 
 
@@ -23,7 +22,11 @@ div {
     margin-left: auto;
     margin-right: auto;
 
-  width: 90%;
+  width: 90%;  
+}
 
+.removeVid {
+  background-color: #DDDDDD;
+  padding: 2px;
   
 }
